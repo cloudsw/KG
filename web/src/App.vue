@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div>姓名：{{ name }}</div>
-    <div>性别：{{ sex }}</div>
+    <div>Bot昵称：{{ bot_name }}</div>
+    <div>Bot性别：{{ bot_sex }}</div>
   </div>
   <router-view></router-view>
 </template>
@@ -13,22 +13,22 @@ import { ref } from 'vue';
 export default {
   name: "App",
   setup: () => {
-    let name = ref("");
-    let sex = ref("");
+    let bot_name = ref("");
+    let bot_sex = ref("");
 
     $.ajax({
-      URL: "http://localhost:3000/pk/index/",
+      url: "http://127.0.0.1:3000/pk/index/",
       type: "get",
       success: resp => {
         console.log(resp);
-        name.value = resp.name;
-        sex.value = resp.sex;
+        bot_name.value = resp.name;
+        bot_sex.value = resp.sex;
       }
     });
 
     return {
-      name,
-      sex
+      bot_name,
+      bot_sex
     }
   }
 }
@@ -37,5 +37,6 @@ export default {
 <style>
 body {
   background-image: url("@/assets/logo.png");
+  background-size: cover;
 }
 </style>

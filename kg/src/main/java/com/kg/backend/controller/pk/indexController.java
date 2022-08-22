@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/pk")
+@RequestMapping("/pk/")
 public class indexController {
 
-    @RequestMapping("/index/")
+    @RequestMapping("index/")
     public Map<String, String> index(){
         Map<String, String > map1 = new HashMap<>();
         map1.put("name", "fuck");
