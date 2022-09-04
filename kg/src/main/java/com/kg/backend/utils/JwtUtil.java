@@ -11,6 +11,7 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
 
+//用来创建、解析jwt token
 @Component
 public class JwtUtil {
     public static final long JWT_TTL = 60 * 60 * 1000L * 24 * 14;  // 有效期14天
