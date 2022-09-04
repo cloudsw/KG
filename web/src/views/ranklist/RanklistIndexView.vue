@@ -1,6 +1,6 @@
 <template>
     <ContentField>
-        对局列表
+        排行榜
     </ContentField>
 </template>
 

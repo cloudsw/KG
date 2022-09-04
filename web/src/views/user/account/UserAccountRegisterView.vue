@@ -1,6 +1,6 @@
 <template>
     <ContentField>
-        对局列表
+        注册
     </ContentField>
 </template>
 
