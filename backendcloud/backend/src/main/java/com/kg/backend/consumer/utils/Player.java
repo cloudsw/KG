@@ -25,14 +25,14 @@ public class Player {
         List<Cell> res = new ArrayList<>();
 
         int[] dx = {-1, 0, 1, 0}, dy = {0, 1, 0, -1};
-        int x = sx, y = sy;
+        int x = this.sx, y = this.sy;
         int step = 0;
         res.add(new Cell(x, y));
-        for (int d: steps) {
+        for (int d: this.steps) {
             x += dx[d];
             y += dy[d];
             res.add(new Cell(x, y));
-            if (!check_tail_increasing( ++ step)) {
+            if (!this.check_tail_increasing( ++ step)) {
                 res.remove(0);
             }
         }

@@ -23,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @ServerEndpoint("/websocket/{token}")  // 注意不要以'/'结尾
 public class WebSocketServer {
 
-    final public static ConcurrentHashMap<Integer, WebSocketServer> users = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<Integer, WebSocketServer> users = new ConcurrentHashMap<>();
     private User user;
     private Session session = null;
     private static UserMapper userMapper;
@@ -58,8 +58,6 @@ public class WebSocketServer {
         } else {
             this.session.close();
         }
-
-        System.out.println(users);
     }
 
     @OnClose
@@ -123,10 +121,10 @@ public class WebSocketServer {
     }
 
     private void move(int direction) {
-        if (game.getPlayerA().getId().equals(user.getId())) {
-            game.setNextStepA(direction);
-        } else if (game.getPlayerB().getId().equals(user.getId())) {
-            game.setNextStepB(direction);
+        if (this.game.getPlayerA().getId().equals(this.user.getId())) {
+            this.game.setNextStepA(direction);
+        } else if (this.game.getPlayerB().getId().equals(this.user.getId())) {
+            this.game.setNextStepB(direction);
         }
     }
 
@@ -136,11 +134,11 @@ public class WebSocketServer {
         JSONObject data = JSONObject.parseObject(message);
         String event = data.getString("event");
         if ("start-matching".equals(event)) {
-            startMatching();
+            this.startMatching();
         } else if ("stop-matching".equals(event)) {
-            stopMatching();
+            this.stopMatching();
         } else if ("move".equals(event)) {
-            move(data.getInteger("direction"));
+            this.move(data.getInteger("direction"));
         }
     }
 

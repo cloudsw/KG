@@ -18,7 +18,7 @@ public class Game extends Thread {
     private final Player playerA, playerB;
     private Integer nextStepA = null;
     private Integer nextStepB = null;
-    private ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
     private String status = "playing";  // playing -> finished
     private String loser = "";  // all: 平局，A: A输，B: B输
 
@@ -27,16 +27,16 @@ public class Game extends Thread {
         this.cols = cols;
         this.inner_walls_count = inner_walls_count;
         this.g = new int[rows][cols];
-        playerA = new Player(idA, rows - 2, 1, new ArrayList<>());
-        playerB = new Player(idB, 1, cols - 2, new ArrayList<>());
+        this.playerA = new Player(idA, rows - 2, 1, new ArrayList<>());
+        this.playerB = new Player(idB, 1, cols - 2, new ArrayList<>());
     }
 
     public Player getPlayerA() {
-        return playerA;
+        return this.playerA;
     }
 
     public Player getPlayerB() {
-        return playerB;
+        return this.playerB;
     }
 
     public void setNextStepA(Integer nextStepA) {
@@ -169,8 +169,8 @@ public class Game extends Thread {
         List<Cell> cellsA = playerA.getCells();
         List<Cell> cellsB = playerB.getCells();
 
-        boolean validA = check_valid(cellsA, cellsB);
-        boolean validB = check_valid(cellsB, cellsA);
+        boolean validA = this.check_valid(cellsA, cellsB);
+        boolean validB = this.check_valid(cellsB, cellsA);
         if (!validA || !validB) {
             status = "finished";
 
@@ -196,10 +196,10 @@ public class Game extends Thread {
         try {
             JSONObject resp = new JSONObject();
             resp.put("event", "move");
-            resp.put("a_direction", nextStepA);
-            resp.put("b_direction", nextStepB);
-            sendAllMessage(resp.toJSONString());
-            nextStepA = nextStepB = null;
+            resp.put("a_direction", this.nextStepA);
+            resp.put("b_direction", this.nextStepB);
+            this.sendAllMessage(resp.toJSONString());
+            this.nextStepA = this.nextStepB = null;
         } finally {
             lock.unlock();
         }
@@ -207,9 +207,9 @@ public class Game extends Thread {
 
     private String getMapString() {
         StringBuilder res = new StringBuilder();
-        for (int i = 0; i < rows; i ++ ) {
-            for (int j = 0; j < cols; j ++ ) {
-                res.append(g[i][j]);
+        for (int i = 0; i < this.rows; i ++ ) {
+            for (int j = 0; j < this.cols; j ++ ) {
+                res.append(this.g[i][j]);
             }
         }
         return res.toString();
@@ -237,32 +237,32 @@ public class Game extends Thread {
     private void sendResult() {  // 向两个Client公布结果
         JSONObject resp = new JSONObject();
         resp.put("event", "result");
-        resp.put("loser", loser);
+        resp.put("loser", this.loser);
         saveToDatabase();
-        sendAllMessage(resp.toJSONString());
+        this.sendAllMessage(resp.toJSONString());
     }
 
     @Override
     public void run() {
         for (int i = 0; i < 1000; i ++ ) {
-            if (nextStep()) {  // 是否获取了两条蛇的下一步操作
-                judge();
-                if (status.equals("playing")) {
-                    sendMove();
+            if (this.nextStep()) {  // 是否获取了两条蛇的下一步操作
+                this.judge();
+                if (this.status.equals("playing")) {
+                    this.sendMove();
                 } else {
-                    sendResult();
+                    this.sendResult();
                     break;
                 }
             } else {
-                status = "finished";
+                this.status = "finished";
                 lock.lock();
                 try {
-                    if (nextStepA == null && nextStepB == null) {
+                    if (this.nextStepA == null && this.nextStepB == null) {
                         loser = "all";
-                    } else if (nextStepA == null) {
-                        loser = "A";
+                    } else if (this.nextStepA == null) {
+                        this.loser = "A";
                     } else {
-                        loser = "B";
+                        this.loser = "B";
                     }
                 } finally {
                     lock.unlock();
