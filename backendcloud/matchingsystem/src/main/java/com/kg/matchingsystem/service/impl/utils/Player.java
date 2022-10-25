@@ -11,5 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class Player {
     private Integer userId;
     private Integer rating;
+    private Integer botId;
     private Integer waitingTime;
 }
